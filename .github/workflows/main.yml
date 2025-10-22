@@ -1,6 +1,5 @@
 name: 🕵️ Website Vulnerability Scan (OWASP ZAP Full Scan)
 
-# ワークフローをGitHub ActionsのUIから手動で実行できるようにします
 on:
   workflow_dispatch:
     inputs:
@@ -15,24 +14,17 @@ jobs:
     name: Run ZAP Full Scan
     
     steps:
-      # 1. リポジトリのコードをチェックアウト (設定ファイル等を使う場合に必要)
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. OWASP ZAP Full Scan を実行
-      # (修正点: owasp/ -> zaproxy/ , バージョンを v0.12.0 に更新)
       - name: OWASP ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-          # 手動実行時に入力されたターゲットURL
           target: ${{ github.event.inputs.target_url }}
-
-          # スキャン結果を 'zap-scan-report' という名前のアーティファクト(ZIPファイル)として
-          # アップロードします。この中に超詳細なHTMLレポートが含まれます。
           artifact_name: zap-scan-report
           
-          # (オプション) 必要に応じて他のパラメータを追加してください
-          # 例: Ajaxスパイダーも実行する場合 (スキャン時間が長くなります)
-          # cmd_options: '-a'
+          # ▼▼▼ この行を追加してエラーを修正 ▼▼▼
+          # false に設定して、GitHub Issue が自動作成されないようにします
+          create_issue: false
