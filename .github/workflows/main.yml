@@ -22,8 +22,9 @@ jobs:
           fetch-depth: 0
 
       # 2. OWASP ZAP Full Scan を実行
+      # (修正点: owasp/ -> zaproxy/ , バージョンを v0.12.0 に更新)
       - name: OWASP ZAP Full Scan
-        uses: owasp/zap-action-full-scan@v0.10.0 # ZAPのフルスキャン用Action
+        uses: zaproxy/action-full-scan@v0.12.0
         with:
           # 手動実行時に入力されたターゲットURL
           target: ${{ github.event.inputs.target_url }}
@@ -32,9 +33,6 @@ jobs:
           # アップロードします。この中に超詳細なHTMLレポートが含まれます。
           artifact_name: zap-scan-report
           
-          # (オプション) 特定のルールを無視する場合などに使います (例: '-z "-config rule.10020.threshold=OFF"')
-          # cmd_options: ''
-
-          # (注) create_issue: true にすると脆弱性が見つかるたびにIssueが作られますが、
-          # 大量に作られてしまう可能性があるため、まずはアーティファクトの確認を推奨します。
-          # create_issue: false
+          # (オプション) 必要に応じて他のパラメータを追加してください
+          # 例: Ajaxスパイダーも実行する場合 (スキャン時間が長くなります)
+          # cmd_options: '-a'
